@@ -18,8 +18,9 @@ app.use('/api', productRoutes);
 
 describe('Product Controller', () => {
   afterEach(() => {
-    jest.clearAllMocks(); 
+    jest.clearAllMocks();
   });
+
 
   describe('POST /api/products', () => {
     it('should create a product and return 201', async () => {
@@ -43,7 +44,19 @@ describe('Product Controller', () => {
       expect(res.status).toBe(400);
       expect(res.body.error).toBe('All fields are required');
     });
+
+    it('should return 500 if create throws an error', async () => {
+      Product.create.mockRejectedValue(new Error('Database error'));
+
+      const res = await request(app)
+        .post('/api/products')
+        .send({ name: 'Test', quantity: 5, price: 100 });
+
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Server error');
+    });
   });
+
 
   describe('GET /api/products', () => {
     it('should return all products', async () => {
@@ -63,7 +76,17 @@ describe('Product Controller', () => {
 
       expect(res.status).toBe(404);
     });
+
+    it('should return 500 if find throws an error', async () => {
+      Product.find.mockRejectedValue(new Error('Database error'));
+
+      const res = await request(app).get('/api/products');
+
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Server error');
+    });
   });
+
 
   describe('DELETE /api/products/:id', () => {
     it('should delete a product and return success message', async () => {
@@ -81,6 +104,15 @@ describe('Product Controller', () => {
       const res = await request(app).delete('/api/products/1');
 
       expect(res.status).toBe(404);
+    });
+
+    it('should return 500 if delete throws an error', async () => {
+      Product.findByIdAndDelete.mockRejectedValue(new Error('Database error'));
+
+      const res = await request(app).delete('/api/products/1');
+
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Server error');
     });
   });
 
@@ -104,6 +136,17 @@ describe('Product Controller', () => {
         .send({ name: 'Updated', quantity: 2, price: 50 });
 
       expect(res.status).toBe(404);
+    });
+
+    it('should return 500 if update throws an error', async () => {
+      Product.findByIdAndUpdate.mockRejectedValue(new Error('Database error'));
+
+      const res = await request(app)
+        .put('/api/products/1')
+        .send({ name: 'Updated', quantity: 2, price: 50 });
+
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Server error');
     });
   });
 });
