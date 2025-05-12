@@ -23,7 +23,8 @@ export const getAllProduct = async (req, res) => {
         return res.status(404).json({ message: "Products is not found" });
       res.status(200).json(products);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({error: error.message})
     }
   };
 

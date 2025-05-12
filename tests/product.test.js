@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import { jest } from '@jest/globals';
 import productRoutes from '../src/routes/product.routes.js';
+import Product from '../src/models/Product.js';
 
 jest.mock('../src/models/Product.js', () => ({
   create: jest.fn(),
@@ -9,8 +10,6 @@ jest.mock('../src/models/Product.js', () => ({
   findByIdAndDelete: jest.fn(),
   findByIdAndUpdate: jest.fn(),
 }));
-
-import Product from '../src/models/Product.js';
 
 const app = express();
 app.use(express.json());
@@ -53,7 +52,7 @@ describe('Product Controller', () => {
         .send({ name: 'Test', quantity: 5, price: 100 });
 
       expect(res.status).toBe(500);
-      expect(res.body.error).toBe('Server error');
+      expect(res.body.error).toBe('Database error');
     });
   });
 
@@ -83,7 +82,7 @@ describe('Product Controller', () => {
       const res = await request(app).get('/api/products');
 
       expect(res.status).toBe(500);
-      expect(res.body.error).toBe('Server error');
+      expect(res.body.error).toBe('Database error');
     });
   });
 
@@ -112,7 +111,7 @@ describe('Product Controller', () => {
       const res = await request(app).delete('/api/products/1');
 
       expect(res.status).toBe(500);
-      expect(res.body.error).toBe('Server error');
+      expect(res.body.error).toBe('Database error');
     });
   });
 
@@ -146,7 +145,7 @@ describe('Product Controller', () => {
         .send({ name: 'Updated', quantity: 2, price: 50 });
 
       expect(res.status).toBe(500);
-      expect(res.body.error).toBe('Server error');
+      expect(res.body.error).toBe('Database error');
     });
   });
 });
