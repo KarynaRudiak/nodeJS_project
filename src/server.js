@@ -4,7 +4,7 @@ import productRoutes from './routes/product.routes.js';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
-const swaggerDocument = YAML.load('../openapi.yaml'); 
+const swaggerDocument = YAML.load('./openapi.yaml'); 
 
 const app = express();
 app.use(express.json());
@@ -23,7 +23,7 @@ connectDB()
     .then(() => {
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
-            console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
+            console.log(`Swagger docs available at: /api-docs`);
         });
     })
     .catch((error) => {
