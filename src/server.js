@@ -12,8 +12,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-    res.json({ message: `Hello home page. https://nodejs-project-ru3o.onrender.com/api-docs
-` });
+    res.json({ message: `Hello home page. Swagger docs available at: /api-docs`});
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
